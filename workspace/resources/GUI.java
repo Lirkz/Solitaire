@@ -17,9 +17,11 @@ import java.util.Stack;
 
 public class GUI extends JFrame implements ActionListener, MouseListener, MouseMotionListener{
 
-	Solitaire game;
-   public GUI(Solitaire game){
+	Blackjack game;
+	Dealer dealer;
+   public GUI(Blackjack game){
 	   this.game= game;
+	   dealer = new Dealer(this.game);
         //Create and set up the window.
        setTitle("Solitaire");
        setSize(900,700);

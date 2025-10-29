@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 public class Card extends JPanel{
 		// Members
 		public int value;
+		public boolean isAce;
 		public Suit suit;
 		private BufferedImage image;
 		private BufferedImage backImage;
@@ -49,10 +50,10 @@ public class Card extends JPanel{
 		 */
 		public static String valueString(int value) {
 								
-			if(value == 11) return "J";
-			if(value == 12) return "Q";
-			if(value == 13) return "K";
-			if(value == 1) return "A";
+			if(value == 11) return "a";
+			if(value == 12) return "q";
+			if(value == 13) return "k";
+			if(value == 1) return "a";
 			
 			// Value between 2 and 10
 			return Integer.toString(value);
@@ -64,10 +65,10 @@ public class Card extends JPanel{
 		 */
 		public static int valueInt(String value) {
 			
-			if(value.equals("J")) return 11;
-			if(value.equals("Q")) return 12;
-			if(value.equals("K")) return 13;
-			if(value.equals("A")) return 1;
+			if(value.equals("j")) return 10;
+			if(value.equals("q")) return 10;
+			if(value.equals("k")) return 10;
+			if(value.equals("a")) return 11;
 			
 			return Integer.parseInt(value);
 		}
@@ -94,6 +95,14 @@ public class Card extends JPanel{
 		 */
 		public Card(int value, Suit suit) {
 			this.value = value;
+			if (value>10){
+				value=10;
+			}
+			if (value == 1){
+				isAce=true;
+			}else{
+				isAce=false;
+			}
 			this.suit = suit;		
 			isReversed = false;
 			

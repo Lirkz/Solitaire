@@ -1,0 +1,39 @@
+package resources;
+import java.util.ArrayList;
+public class Dealer {
+    int score;
+    int aces;
+    Boolean busted;
+    ArrayList<Card> cards = new ArrayList<>();
+    Blackjack game;
+
+    public Dealer(Blackjack g){
+        game = g;
+        cards.add(game.hit());
+        cards.add(game.hit());
+        for (Card card : cards){
+            score +=  card.value;
+        }
+    }
+
+    public void play(){
+        while (score<17){
+            game.hit();
+            for (Card card : cards){
+                if (card.isAce){ 
+                    aces++;
+                }
+            }
+            while (aces>0 && score >21){
+                score-=10;
+                aces--;
+            }
+            aces = 0;
+        }
+        if (score>21){
+            busted = true;
+        }
+    }
+
+    
+}
