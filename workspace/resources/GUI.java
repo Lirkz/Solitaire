@@ -100,21 +100,27 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         middle.setOpaque(false);
         add(middle, c);
 
-		Icon tempIcon = new ImageIcon(stand.svg);
+		Icon tempIcon = new ImageIcon(stand.png);
 		JButton standButton = new JButton(tempIcon);
 		standButton.addActionListener(new ActionListener(){
 			@Override
 				public void actionPerformed(ActionEvent e) {
-					
+					if(/*player turn*/){
+                        /* switch to dealer's turn */
+                    }
+
 				}
 		});
 		
-		tempIcon = new ImageIcon(hit.svg);
+		tempIcon = new ImageIcon(hit.png);
 		Jbutton hitButton = new JButton(tempIcon);
 		hitButton.addActionListener(new ActionListener(){
 			@Override
 				public void actionPerformed(ActionEvent e) {
-					game.hit();
+                    if(/*player turn*/){
+                        game.hit();
+                        /* switch to dealer's turn */
+                    }
 				}
 		});
  
@@ -132,9 +138,6 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
  
 
         this.setVisible(true);
-        Stack<Card> a = new Stack<Card>();
-        a.add(new Card(2, Suit.Diamonds));
-        middle.add(drawPile(a));
     }
  
 
