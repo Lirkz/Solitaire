@@ -10,7 +10,6 @@ public class Blackjack {
 	//the part of your program that's in charge of game rules goes here.
 	public Card hit(){
 		Card card = deck.pop();
-		discard.add(card);
 		return card;
 	}
 

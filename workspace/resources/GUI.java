@@ -19,6 +19,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
 	Blackjack game;
 	Dealer dealer;
+	Player player;
    public GUI(Blackjack game){
 	   this.game= game;
 	   dealer = new Dealer(this.game);
