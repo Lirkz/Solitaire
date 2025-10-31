@@ -24,39 +24,23 @@ import java.util.Stack;
 public class GUI extends JFrame implements ActionListener, MouseListener, MouseMotionListener {
  
 
-    Solitaire game;
+    Blackjack game;
     Dealer dealer;
 
 
-    public GUI(Solitaire game) {
+    public GUI(Blackjack game) {
         this.game = game;
         dealer = new Dealer(this.game);
         // Create and set up the window.
-        setTitle("Solitaire");
+        setTitle("Blackjack");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  
-
-<<<<<<< HEAD
-	Blackjack game;
-	Dealer dealer;
-   public GUI(Blackjack game){
-	   this.game= game;
-	   dealer = new Dealer(this.game);
-	   this.game.dealer = dealer;
-        //Create and set up the window.
-       setTitle("Solitaire");
-       setSize(900,700);
-       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	   
-=======
         // this supplies the background
         try {
             System.out.println(getClass().toString());
             Image blackImg = ImageIO.read(getClass().getResource("background.jpg"));
             setContentPane(new ImagePanel(blackImg));
- 
->>>>>>> c9349eb5d7cc1cb79cf2e1a6f56119482fc63451
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -129,7 +113,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 		});
 		
 		tempIcon = new ImageIcon(hit.png);
-		Jbutton hitButton = new JButton(tempIcon);
+		JButton hitButton = new JButton(tempIcon);
 		hitButton.addActionListener(new ActionListener(){
 			@Override
 				public void actionPerformed(ActionEvent e) {
@@ -245,4 +229,11 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         // TODO Auto-generated method stub
  
 
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
