@@ -15,9 +15,16 @@ public class Blackjack {
     ArrayList<Card> cards = new ArrayList<>();
 	
 	//the part of your program that's in charge of game rules goes here.
-	public Card hit(){
+	public Card backHit(){
 		Card card = deck.pop();
 		return card;
+	}
+
+	public void hit(){
+		Card card = backHit();
+		cards.add(card);
+		score +=card.value;
+		if ()
 	}
 
 	public Card stand(){
@@ -35,7 +42,6 @@ public class Blackjack {
         }
         if (score>21){
             busted = true;
-        }
-		//cards -> discard (visually as well)
+		}
 	}
 }

@@ -9,8 +9,8 @@ public class Dealer {
 
     public Dealer(Blackjack g){
         game = g;
-        cards.add(game.hit());
-        cards.add(game.hit());
+        cards.add(game.backHit());
+        cards.add(game.backHit());
         for (Card card : cards){
             int newVal = card.value;
             if (newVal == 1){
@@ -22,7 +22,7 @@ public class Dealer {
 
     public void play(){
         while (score<17){
-            game.hit();
+            game.backHit();
             for (Card card : cards){
                 if (card.isAce){ 
                     aces++;
