@@ -100,6 +100,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         middle.setOpaque(false);
         add(middle, c);
 
+        //I want a way to show if the buttons are allowed to use, if its the player's turn. idk if i should use an if statement
+
 		Icon tempIcon = new ImageIcon(stand.png);
 		JButton standButton = new JButton(tempIcon);
 		standButton.addActionListener(new ActionListener(){
@@ -107,8 +109,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 				public void actionPerformed(ActionEvent e) {
 					if(/*player turn*/){
                         /* switch to dealer's turn */
+                        //standButton.setVisible(false);
                     }
-
 				}
 		});
 		
@@ -120,7 +122,9 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
                     if(/*player turn*/){
                         game.hit();
                         /* switch to dealer's turn */
+                        //standButton.setVisible(false);
                     }
+                    
 				}
 		});
  
