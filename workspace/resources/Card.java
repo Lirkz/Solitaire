@@ -95,9 +95,6 @@ public class Card extends JPanel{
 		 */
 		public Card(int value, Suit suit) {
 			this.value = value;
-			if (value>10){
-				value=10;
-			}
 			if (value == 1){
 				isAce=true;
 			}else{

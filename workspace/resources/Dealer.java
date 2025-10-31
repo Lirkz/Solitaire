@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Dealer {
     int score;
     int aces;
-    Boolean busted;
+    boolean busted;
     ArrayList<Card> cards = new ArrayList<>();
     Blackjack game;
 
@@ -12,7 +12,11 @@ public class Dealer {
         cards.add(game.hit());
         cards.add(game.hit());
         for (Card card : cards){
-            score +=  card.value;
+            int newVal = card.value;
+            if (newVal == 1){
+                newVal = 11;
+            }
+            score +=  newVal;
         }
     }
 
@@ -33,6 +37,7 @@ public class Dealer {
         if (score>21){
             busted = true;
         }
+        game.playerTurn=true;
     }
 
     
