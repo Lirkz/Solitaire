@@ -100,31 +100,19 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
         //I want a way to show if the buttons are allowed to use, if its the player's turn. idk if i should use an if statement
 
-		Icon tempIcon = new ImageIcon(stand.png);
+		Icon tempIcon = new ImageIcon("stand.png");
 		JButton standButton = new JButton(tempIcon);
 		standButton.addActionListener(new ActionListener(){
 			@Override
 				public void actionPerformed(ActionEvent e) {
-					if(/*player turn*/){
+					//if(/*player turn*/){
                         /* switch to dealer's turn */
                         //standButton.setVisible(false);
-                    }
+                    //}
 				}
 		});
 		
-		tempIcon = new ImageIcon(hit.png);
-		JButton hitButton = new JButton(tempIcon);
-		hitButton.addActionListener(new ActionListener(){
-			@Override
-				public void actionPerformed(ActionEvent e) {
-                    if(/*player turn*/){
-                        game.hit();
-                        /* switch to dealer's turn */
-                        //standButton.setVisible(false);
-                    }
-                    
-				}
-		});
+		
  
 
         /*******
@@ -237,3 +225,4 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
+}

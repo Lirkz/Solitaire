@@ -8,14 +8,21 @@ public class Blackjack {
 	ArrayList<Card> discard;
 	Dealer dealer;
 
-	boolean playerTurn = false;
+	boolean playerTurn = true;
 	boolean busted = false;
 	int score = 0;
 	int aces = 0;
+	int usedAces=0;
     ArrayList<Card> cards = new ArrayList<>();
 	
 	//the part of your program that's in charge of game rules goes here.
 	public Card backHit(){
+		if (deck.peek() == null){
+			for (int i = discard.size(); i>0; i++){
+				int num = Math.random()*discard.size();
+				deck.push(cards[num]);
+			}
+		}
 		Card card = deck.pop();
 		return card;
 	}
@@ -24,24 +31,31 @@ public class Blackjack {
 		Card card = backHit();
 		cards.add(card);
 		score +=card.value;
-		if ()
-	}
-
-	public Card stand(){
-		while (score<17){
-            for (Card card : cards){
-                if (card.isAce){ 
+		if (card.value==1){
+			score+=10;
+		}
+		if (score>21){
+			for (Card card2 : cards){
+                if (card2.isAce){ 
                     aces++;
                 }
             }
+			aces -= usedAces;
             while (aces>0 && score >21){
                 score-=10;
                 aces--;
+				usedAces++;
             }
+			if (score>21){
+				busted = true;
+			}
             aces = 0;
-        }
-        if (score>21){
-            busted = true;
+		}
+	}
+
+	public void stand(){
+		if (playerTurn){
+			playerTurn = false;
 		}
 	}
 }
