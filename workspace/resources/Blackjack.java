@@ -17,13 +17,13 @@ public class Blackjack {
 	
 	//the part of your program that's in charge of game rules goes here.
 	public Card backHit(){
-		if (deck.peek() == null){
+		if (deck.empty()){
 			for (int i = discard.size(); i>0; i++){
 				int num = (int)(Math.random()*discard.size());
 				deck.push(discard.get(num));
 				discard.remove(num);
 			}
-			
+
 		}
 		Card card = deck.pop();
 		return card;
