@@ -19,8 +19,9 @@ public class Blackjack {
 	public Card backHit(){
 		if (deck.peek() == null){
 			for (int i = discard.size(); i>0; i++){
-				int num = Math.random()*discard.size();
-				deck.push(cards[num]);
+				int num = (int)(Math.random()*discard.size());
+				deck.push(cards.get(num));
+				cards.remove(num);
 			}
 		}
 		Card card = deck.pop();
