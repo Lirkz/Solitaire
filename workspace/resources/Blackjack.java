@@ -20,9 +20,10 @@ public class Blackjack {
 		if (deck.peek() == null){
 			for (int i = discard.size(); i>0; i++){
 				int num = (int)(Math.random()*discard.size());
-				deck.push(cards.get(num));
-				cards.remove(num);
+				deck.push(discard.get(num));
+				discard.remove(num);
 			}
+			
 		}
 		Card card = deck.pop();
 		return card;
