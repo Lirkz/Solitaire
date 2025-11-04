@@ -1,12 +1,9 @@
 package resources;
- 
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
- 
 
 import resources.Card.Suit;
- 
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,23 +16,22 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Stack;
- 
 
 public class GUI extends JFrame implements ActionListener, MouseListener, MouseMotionListener {
- 
 
     Blackjack game;
     Dealer dealer;
 
-
     public GUI(Blackjack game) {
+
         this.game = game;
+        
         dealer = new Dealer(this.game);
         // Create and set up the window.
         setTitle("Blackjack");
         setSize(900, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
- 
+
         // this supplies the background
         try {
             System.out.println(getClass().toString());
@@ -45,21 +41,18 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         } catch (IOException e) {
             e.printStackTrace();
         }
- 
 
         getContentPane().setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         JPanel back = new JPanel();
         c.ipadx = 800;
         c.ipady = 400;
- 
 
         c.gridx = 0;
         c.gridy = 0;
         back.setBorder(BorderFactory.createLineBorder(Color.black, 5));
         back.setBackground(new Color(0, 0, 0, 0));
         add(back, c);
- 
 
         JPanel top = new JPanel();
         c.anchor = GridBagConstraints.PAGE_START;
@@ -71,7 +64,6 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         top.setBorder(BorderFactory.createLineBorder(Color.blue, 5));
         top.setBackground(new Color(0, 0, 0, 0));
         add(top, c);
- 
 
         JPanel bottom = new JPanel();
         c.anchor = GridBagConstraints.PAGE_END;
@@ -83,7 +75,6 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         bottom.setBorder(BorderFactory.createLineBorder(Color.red, 5));
         bottom.setBackground(new Color(0, 0, 0, 0));
         add(bottom, c);
- 
 
         JPanel middle = new JPanel();
         c.anchor = GridBagConstraints.CENTER;
@@ -93,27 +84,31 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         c.gridy = 0;
         c.weightx = 3;
         middle.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
-        //middle.setBackground(new Color(0, 0, 0, 0));
+        // middle.setBackground(new Color(0, 0, 0, 0));
         middle.setLayout(new FlowLayout());
         middle.setOpaque(false);
         add(middle, c);
 
-        //I want a way to show if the buttons are allowed to use, if its the player's turn. idk if i should use an if statement
+        // I want a way to show if the buttons are allowed to use, if its the player's
+        // turn. idk if i should use an if statement
 
-		Icon tempIcon = new ImageIcon("stand.png");
-		JButton standButton = new JButton(tempIcon);
-		standButton.addActionListener(new ActionListener(){
-			@Override
-				public void actionPerformed(ActionEvent e) {
-					//if(/*player turn*/){
-                        /* switch to dealer's turn */
-                        //standButton.setVisible(false);
-                    //}
-				}
-		});
-		
-		
- 
+        Icon tempIcon = new ImageIcon("stand.png");
+        JButton standButton = new JButton(tempIcon);
+        standButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.playerTurn = false;
+            }
+        });
+
+        tempIcon = new ImageIcon("hit.png");
+        JButton hitButton = new JButton(tempIcon);
+        hitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.hit();
+            }
+        });
 
         /*******
          * This is just a test to make sure images are being read correctly on your
@@ -122,103 +117,125 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
          * should allow you to play the solitare
          * game once it's fully created.
          */
-        // Card card = new Card(2, Card.Suit.Diamonds);
+        Card card = new Card(2, Card.Suit.Diamonds);
+        card.isReversed=true;
+        card.size
+        middle.add(card);
+
         // System.out.println(card);
         // this.add(card);
- 
 
         this.setVisible(true);
     }
- 
 
-//retruns a j layered pane with the cards inside it
- 
+    // retruns a j layered pane with the cards inside it
 
     public JLayeredPane drawPile(Stack<Card> stackIn) {
- 
 
         Object cards[];
-       
+
         cards = stackIn.toArray();
         ArrayList<Card> pile = new ArrayList<>();
         int offset = 50;
         JLayeredPane pane = new JLayeredPane();
         pane.setLayout(null);
-        for(int i = 0; i < cards.length; i++){
+        for (int i = 0; i < cards.length; i++) {
             System.out.println("here");
-        Card temp = (Card)cards[i];
-        //temp.setSize(20,20);
-        temp.setBounds(0, offset*i, 20, 20);
-        pane.add(temp);
- 
+            Card temp = (Card) cards[i];
+            // temp.setSize(20,20);
+            temp.setBounds(0, offset * i, 20, 20);
+            pane.add(temp);
 
         }
         pane.setPreferredSize(new Dimension(200, 80));
-        pane.setBorder(BorderFactory.createMatteBorder(2, 2, 2,2, Color.black));
+        pane.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black));
         return pane;
         // please note we convert this stack to an array so that we can iterate through
-                                    // it backwards while drawing. You’ll need to cast each element inside cards to
-                                    // a <Card> in order to use the methods to adjust their position
- 
+        // it backwards while drawing. You’ll need to cast each element inside cards to
+        // a <Card> in order to use the methods to adjust their position
 
     }
- 
+
+    // private void update() {
+
+    //     columns.removeAll();
+
+    //     topColumns.removeAll();
+
+    //     ArrayList<Stack<Card>> allColumns = game.getColumns();
+
+    //     for (Stack<Card> stack : allColumns) {
+
+    //         topColumns.add(drawPile(stack, false));
+
+    //     }
+
+    //     columns.add(drawDeck(game.getDeck()));
+
+    //     columns.add(drawPile(game.getPile(), true));
+
+    //     columns.add(drawFinal(game.hearts, "hearts"));
+
+    //     columns.add(drawFinal(game.spades, "spades"));
+
+    //     columns.add(drawFinal(game.diamonds, "diamonds"));
+
+    //     columns.add(drawFinal(game.clubs, "clubs"));
+
+    //     if (game.playerTurn){
+    //         standButton.setVisible();
+    //         hitButton.setVisible();
+    //     }
+
+    //     System.out.println("updating");
+
+    //     this.revalidate();
+
+    //     this.repaint();
+
+    // }
 
     @Override
     public void mouseDragged(MouseEvent arg0) {
         // TODO Auto-generated method stub
- 
 
     }
- 
 
     @Override
     public void mouseMoved(MouseEvent arg0) {
         // TODO Auto-generated method stub
- 
 
     }
- 
 
     @Override
     public void mouseClicked(MouseEvent arg0) {
         // TODO Auto-generated method stub
- 
 
     }
- 
 
     @Override
     public void mouseEntered(MouseEvent arg0) {
         // TODO Auto-generated method stub
- 
 
     }
- 
 
     @Override
     public void mouseExited(MouseEvent arg0) {
         // TODO Auto-generated method stub
- 
 
     }
- 
 
     @Override
     public void mousePressed(MouseEvent arg0) {
         // TODO Auto-generated method stub
- 
 
     }
- 
 
     @Override
     public void mouseReleased(MouseEvent arg0) {
         // TODO Auto-generated method stub
- 
 
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {

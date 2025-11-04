@@ -9,8 +9,10 @@ public class Dealer {
 
     public Dealer(Blackjack g){
         game = g;
-        cards.add(game.backHit());
-        cards.add(game.backHit());
+        Card card1 =game.hit();
+        card1.isReversed=true;
+        cards.add(card1);
+        cards.add(game.hit());
         for (Card card : cards){
             int newVal = card.value;
             if (newVal == 1){
@@ -22,9 +24,9 @@ public class Dealer {
 
     public void play(){
         while (score<17){
-            game.backHit();
+            game.hit();
             for (Card card : cards){
-                if (card.isAce){ 
+                if (card.isAce){
                     aces++;
                 }
             }
@@ -37,7 +39,8 @@ public class Dealer {
         if (score>21){
             busted = true;
         }
-        game.playerTurn=true;
+        // game reset* function here
+        
     }
 
     

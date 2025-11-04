@@ -50,7 +50,7 @@ public class Card extends JPanel{
 		 */
 		public static String valueString(int value) {
 								
-			if(value == 11) return "a";
+			if(value == 11) return "j";
 			if(value == 12) return "q";
 			if(value == 13) return "k";
 			if(value == 1) return "a";
