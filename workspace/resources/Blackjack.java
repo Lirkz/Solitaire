@@ -8,6 +8,7 @@ public class Blackjack {
 	Stack<Card> deck = new Stack<Card>();
 	Queue<Card> discard = new LinkedList<Card>();
 	Dealer dealer;
+	GUI gui;
 	boolean playerTurn = true;
 	boolean busted = false;
 	int score = 0;
@@ -90,6 +91,28 @@ public class Blackjack {
 		for(int i = 0; i < cards.size(); i++){
 			discard.add(cards.get(i));
 		}
-		//for()
+		for(int i = 0; i < dealer.cards.size(); i++){
+			discard.add(dealer.cards.get(i));
+		}
+		Dealer newDealer = new Dealer(this);
+		dealer = newDealer;
+		gui.dealer = newDealer;
+		playerHit();
+		playerHit();
+	}
+	
+	public void gameOver(){
+		if(score == dealer.score){
+			//tie
+		}
+
+		if(score > dealer.score || dealer.busted){
+			//win
+		}
+
+		if(score < dealer.score || busted){
+			//lose
+		}
+
 	}
 }

@@ -17,15 +17,25 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Stack;
 
+        
+    
 public class GUI extends JFrame implements ActionListener, MouseListener, MouseMotionListener {
 
     Blackjack game;
     Dealer dealer;
+    GridBagConstraints c = new GridBagConstraints();
+    JPanel back = new JPanel();
+    JPanel top = new JPanel();
+    JPanel bottom = new JPanel();
+    JPanel middle = new JPanel();
+    Icon tempIcon;
+    JButton standButton;
+    JButton hitButton;
 
     public GUI(Blackjack game) {
 
         this.game = game;
-        
+        game.gui = this;
         dealer = new Dealer(this.game);
         // Create and set up the window.
         setTitle("Blackjack");
@@ -43,8 +53,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         }
 
         getContentPane().setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        JPanel back = new JPanel();
+       
         c.ipadx = 800;
         c.ipady = 400;
 
@@ -54,29 +63,31 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         back.setBackground(new Color(0, 0, 0, 0));
         add(back, c);
 
-        JPanel top = new JPanel();
+        
         c.anchor = GridBagConstraints.PAGE_START;
         c.ipadx = 800;
         c.ipady = 110;
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 3;
+        top.setLayout(new FlowLayout());
         top.setBorder(BorderFactory.createLineBorder(Color.blue, 5));
         top.setBackground(new Color(0, 0, 0, 0));
         add(top, c);
 
-        JPanel bottom = new JPanel();
+        
         c.anchor = GridBagConstraints.PAGE_END;
         c.ipadx = 800;
         c.ipady = 110;
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 3;
+        bottom.setLayout(new FlowLayout());
         bottom.setBorder(BorderFactory.createLineBorder(Color.red, 5));
         bottom.setBackground(new Color(0, 0, 0, 0));
         add(bottom, c);
 
-        JPanel middle = new JPanel();
+        
         c.anchor = GridBagConstraints.CENTER;
         c.ipadx = 800;
         c.ipady = 120;
@@ -85,30 +96,38 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         c.weightx = 3;
         middle.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
         // middle.setBackground(new Color(0, 0, 0, 0));
-        middle.setLayout(new FlowLayout());
+        middle.setLayout(null);
         middle.setOpaque(false);
+        
         add(middle, c);
 
         // I want a way to show if the buttons are allowed to use, if its the player's
         // turn. idk if i should use an if statement
 
-        Icon tempIcon = new ImageIcon("stand.png");
-        JButton standButton = new JButton(tempIcon);
+        tempIcon = new ImageIcon("stand.png");
+        standButton = new JButton(tempIcon);
         standButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 game.playerTurn = false;
+                update();
             }
         });
+        middle.add(standButton);
+        
 
         tempIcon = new ImageIcon("hit.png");
-        JButton hitButton = new JButton(tempIcon);
+        hitButton = new JButton(tempIcon);
         hitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 game.hit();
+                update();
             }
+            
         });
+        middle.add(hitButton);
+        
 
         /*******
          * This is just a test to make sure images are being read correctly on your
@@ -117,15 +136,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
          * should allow you to play the solitare
          * game once it's fully created.
          */
-        Card card = new Card(2, Card.Suit.Diamonds);
-        card.isReversed=true;
-        card.size
-        middle.add(card);
-
+        
         // System.out.println(card);
         // this.add(card);
 
         this.setVisible(true);
+        update();
     }
 
     // retruns a j layered pane with the cards inside it
@@ -156,44 +172,46 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
     }
 
-    // private void update() {
+    private void update() {
+        System.out.println("test");
+        if(!game.discard.isEmpty()){
+        Card card = new Card(2, Card.Suit.Diamonds);
+        card.isReversed=true;
+        card.setSize(100, 150);
+        card.setLocation(150, 150);
+        middle.add(card);
+        System.out.println("added discard");
+        }
 
-    //     columns.removeAll();
+        if(game.playerTurn){
+            standButton.setEnabled(true);
+            hitButton.setEnabled(true);
+        }
+        else{
+            standButton.setEnabled(false);
+            hitButton.setEnabled(false);
+        }
+        
+        if(!dealer.cards.isEmpty()){
+            for (Card card : dealer.cards){
+                top.add(card);
+            }
+            
+        }
+        if(!game.cards.isEmpty()){
+            for (Card card : game.cards){
+                bottom.add(card);
+            }
+        }
 
-    //     topColumns.removeAll();
 
-    //     ArrayList<Stack<Card>> allColumns = game.getColumns();
+        System.out.println("updating");
 
-    //     for (Stack<Card> stack : allColumns) {
+        this.revalidate();
 
-    //         topColumns.add(drawPile(stack, false));
+        this.repaint();
 
-    //     }
-
-    //     columns.add(drawDeck(game.getDeck()));
-
-    //     columns.add(drawPile(game.getPile(), true));
-
-    //     columns.add(drawFinal(game.hearts, "hearts"));
-
-    //     columns.add(drawFinal(game.spades, "spades"));
-
-    //     columns.add(drawFinal(game.diamonds, "diamonds"));
-
-    //     columns.add(drawFinal(game.clubs, "clubs"));
-
-    //     if (game.playerTurn){
-    //         standButton.setVisible();
-    //         hitButton.setVisible();
-    //     }
-
-    //     System.out.println("updating");
-
-    //     this.revalidate();
-
-    //     this.repaint();
-
-    // }
+    }
 
     @Override
     public void mouseDragged(MouseEvent arg0) {
@@ -209,7 +227,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
     @Override
     public void mouseClicked(MouseEvent arg0) {
-        // TODO Auto-generated method stub
+        //
 
     }
 
