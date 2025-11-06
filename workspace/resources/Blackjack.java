@@ -2,12 +2,12 @@ package resources;
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Stack;
+import java.util.*;
 
 public class Blackjack {
 	Stack<Card> deck = new Stack<Card>();
-	ArrayList<Card> discard = new ArrayList<Card>();
+	Queue<Card> discard = new LinkedList<Card>();
 	Dealer dealer;
-
 	boolean playerTurn = true;
 	boolean busted = false;
 	int score = 0;
@@ -21,42 +21,35 @@ public class Blackjack {
                 Card card = new Card(1, Card.Suit.Clubs);
                 if (i == 0) {
                     card = new Card(j, Card.Suit.Clubs);
-                    discard.add(card);
+                    deck.push(card);
                 }
                 if (i == 1) {
                     card = new Card(j, Card.Suit.Diamonds);
-                    discard.add(card);
+                    deck.push(card);
                 }
                 if (i == 2) {
                     card = new Card(j, Card.Suit.Hearts);
-                    discard.add(card);
+                    deck.push(card);
                 }
                 if (i == 3) {
                     card = new Card(j, Card.Suit.Spades);
-                    discard.add(card);
+                    deck.push(card);
                 }
                 System.out.println(card);
             }
         }
-        for (int i = 0; i < discard.size(); i++) {
 
-            int num = (int) (Math.random() * discard.size());
-            deck.push(discard.get(num));
-            discard.remove(num);
-        }
+		Collections.shuffle(deck);
+
 		playerHit();
 		playerHit();
 	}
 
 	//the part of your program that's in charge of game rules goes here.
 	public Card hit(){
-		if (deck.empty()){
-			for (int i = discard.size(); i>0; i++){
-				int num = (int)(Math.random()*discard.size());
-				deck.push(discard.get(num));
-				discard.remove(num);
-			}
-		}
+		if (deck.empty())
+		Collections.shuffle(deck);
+		
 		Card card = deck.pop();
 		return card;
 	}
@@ -93,9 +86,10 @@ public class Blackjack {
 		}
 	}
 
-// 	//public void resetGame(){
-// 		//for(int i = 0; cards.length(); i++){
-		//	discard.add(i);
-// 		//}
-// 	//}
+	public void resetGame(){
+		for(int i = 0; i < cards.size(); i++){
+			discard.add(cards.get(i));
+		}
+		//for()
+	}
 }
