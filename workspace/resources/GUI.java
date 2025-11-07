@@ -32,7 +32,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
     JButton standButton;
     JButton hitButton;
 
-    public GUI(Blackjack game) {
+    public GUI(Blackjack game) throws InterruptedException{
 
         this.game = game;
         game.gui = this;
@@ -104,29 +104,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         // I want a way to show if the buttons are allowed to use, if its the player's
         // turn. idk if i should use an if statement
 
-        tempIcon = new ImageIcon("stand.png");
-        standButton = new JButton(tempIcon);
-        standButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                game.playerTurn = false;
-                update();
-            }
-        });
-        middle.add(standButton);
         
-
-        tempIcon = new ImageIcon("hit.png");
-        hitButton = new JButton(tempIcon);
-        hitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                game.hit();
-                update();
-            }
-            
-        });
-        middle.add(hitButton);
         
 
         /*******
@@ -172,8 +150,11 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
     }
 
-    private void update() {
+    public void update() throws InterruptedException {
         System.out.println("test");
+        top.removeAll();
+        bottom.removeAll();
+        middle.removeAll();
         if(!game.discard.isEmpty()){
         Card card = new Card(2, Card.Suit.Diamonds);
         card.isReversed=true;
@@ -181,6 +162,57 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         card.setLocation(150, 150);
         middle.add(card);
         System.out.println("added discard");
+        }
+
+        tempIcon = new ImageIcon("stand.png");
+        standButton = new JButton(tempIcon);
+        standButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                try {
+                    game.stand();
+                } catch (InterruptedException e1) {
+                    
+                    e1.printStackTrace();
+                }
+                try {
+                    update();
+                } catch (InterruptedException e1) {
+                    
+                    e1.printStackTrace();
+                }
+            }
+        });
+        middle.add(standButton);
+        standButton.setSize(150, 100);
+        standButton.setLocation(200, 150);
+        
+
+        tempIcon = new ImageIcon("hit.png");
+        hitButton = new JButton(tempIcon);
+        hitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.hit();
+                try {
+                    update();
+                } catch (InterruptedException e1) {
+                    
+                    e1.printStackTrace();
+                }
+            }
+            
+        });
+        hitButton.setSize(150, 100);
+        hitButton.setLocation(0, 0);
+        middle.add(hitButton);
+
+        if (!game.deck.isEmpty()){
+        Card drawCard = new Card(2, Card.Suit.Diamonds);
+        drawCard.isReversed=true;
+        drawCard.setSize(100, 150);
+        drawCard.setLocation(100, 150);
+        middle.add(drawCard);
         }
 
         if(game.playerTurn){
@@ -204,6 +236,23 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
             }
         }
 
+        if (game.gameState==Blackjack.State.Tie){
+            
+            
+            game.gameState=Blackjack.State.Playing;
+        }
+        
+        if (game.gameState==Blackjack.State.Lose){
+            //display code
+            
+            game.gameState=Blackjack.State.Playing;
+        }
+
+        if (game.gameState == Blackjack.State.Win){
+
+
+            game.gameState=Blackjack.State.Playing;
+        }
 
         System.out.println("updating");
 

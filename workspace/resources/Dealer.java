@@ -1,4 +1,4 @@
-package resources;
+ package resources;
 import java.util.ArrayList;
 public class Dealer {
     int score;
@@ -15,6 +15,9 @@ public class Dealer {
         cards.add(game.hit());
         for (Card card : cards){
             int newVal = card.value;
+            if(newVal>10){
+                newVal=10;
+            }
             if (newVal == 1){
                 newVal = 11;
             }
@@ -22,19 +25,27 @@ public class Dealer {
         }
     }
 
-    public void play(){
+    public void play() throws InterruptedException{
         while (score<17){
+            score =0;
             cards.add(game.hit());
             for (Card card : cards){
                 if (card.isAce){
                     aces++;
                 }
+                int newVal = card.value;
+		        if (newVal>10){
+			        newVal=10;
+		        }
+                score+=newVal;
             }
             while (aces>0 && score >21){
                 score-=10;
                 aces--;
             }
             aces = 0;
+            
+            Thread.sleep(5000);
         }
         if (score>21){
             busted = true;

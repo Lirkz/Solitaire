@@ -15,6 +15,7 @@ public class Blackjack {
 	int aces = 0;
 	int usedAces=0;
     ArrayList<Card> cards = new ArrayList<>();
+	State gameState = State.Playing;
 	
 	public Blackjack(){
 		for (int i = 0; i < 4; i++) {
@@ -58,7 +59,11 @@ public class Blackjack {
 	public void playerHit(){
 		Card card = hit();
 		cards.add(card);
-		score +=card.value;
+		int newVal = card.value;
+		if (newVal>10){
+			newVal=10;
+		}
+		score +=newVal;
 		if (card.value==1){
 			score+=10;
 		}
@@ -81,9 +86,10 @@ public class Blackjack {
 		}
 	}
 
-	public void stand(){
+	public void stand() throws InterruptedException{
 		if (playerTurn){
 			playerTurn = false;
+			dealer.play();
 		}
 	}
 
@@ -101,18 +107,25 @@ public class Blackjack {
 		playerHit();
 	}
 	
-	public void gameOver(){
+	public void gameOver() throws InterruptedException{
 		if(score == dealer.score){
-			//tie
+			gameState = State.Tie;
+			gui.update();
 		}
 
 		if(score > dealer.score || dealer.busted){
-			//win
+			gameState = State.Win;
+			gui.update();
 		}
 
 		if(score < dealer.score || busted){
-			//lose
+			gameState = State.Lose;
+			gui.update();
 		}
 
+	}
+
+	enum State{
+		Playing, Win, Lose, Tie;
 	}
 }
