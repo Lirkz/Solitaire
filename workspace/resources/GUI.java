@@ -36,7 +36,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
         this.game = game;
         game.gui = this;
-        dealer = new Dealer(this.game);
+        dealer = new Dealer(game);
         // Create and set up the window.
         setTitle("Blackjack");
         setSize(900, 700);
@@ -158,14 +158,14 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         if(!game.discard.isEmpty()){
         Card card = new Card(2, Card.Suit.Diamonds);
         card.isReversed=true;
-        card.setSize(100, 150);
+        card.setSize(1000, 1500);
         card.setLocation(150, 150);
         middle.add(card);
         System.out.println("added discard");
         }
 
         tempIcon = new ImageIcon("stand.png");
-        standButton = new JButton(tempIcon);
+        standButton = new JButton("Stand");
         standButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
@@ -183,18 +183,17 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
                 }
             }
         });
-        middle.add(standButton);
-        standButton.setSize(150, 100);
-        standButton.setLocation(200, 150);
+        
         
 
         tempIcon = new ImageIcon("hit.png");
-        hitButton = new JButton(tempIcon);
+        hitButton = new JButton("Hit");
         hitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                game.hit();
+                
                 try {
+                    game.playerHit();
                     update();
                 } catch (InterruptedException e1) {
                     
@@ -203,14 +202,17 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
             }
             
         });
-        hitButton.setSize(150, 100);
-        hitButton.setLocation(0, 0);
+        hitButton.setSize(100, 50);
+        hitButton.setLocation(100, 25);
         middle.add(hitButton);
+        standButton.setSize(100, 50);
+        standButton.setLocation(600, 25);
+        middle.add(standButton);
 
         if (!game.deck.isEmpty()){
         Card drawCard = new Card(2, Card.Suit.Diamonds);
         drawCard.isReversed=true;
-        drawCard.setSize(100, 150);
+        drawCard.setSize(1000, 1500);
         drawCard.setLocation(100, 150);
         middle.add(drawCard);
         }
@@ -220,46 +222,60 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
             hitButton.setEnabled(true);
         }
         else{
-            standButton.setEnabled(false);
+            standButton.setEnabled(true);
             hitButton.setEnabled(false);
         }
         
         if(!dealer.cards.isEmpty()){
             for (Card card : dealer.cards){
+                card.setPreferredSize(new Dimension(80, 120));
                 top.add(card);
             }
             
         }
         if(!game.cards.isEmpty()){
             for (Card card : game.cards){
+                card.setPreferredSize(new Dimension(80, 120));
                 bottom.add(card);
             }
         }
 
+      
+        JLabel endState = new JLabel("Playing");
+        endState.setLocation(15,0);
+        endState.setSize(600,300);
+        
+        middle.add(endState);
+        
         if (game.gameState==Blackjack.State.Tie){
-            
+            endState.setText("You Tied");
             
             game.gameState=Blackjack.State.Playing;
         }
         
-        if (game.gameState==Blackjack.State.Lose){
-            //display code
+        else if (game.gameState==Blackjack.State.Lose){
+            endState.setText("You Lose");
             
             game.gameState=Blackjack.State.Playing;
         }
 
-        if (game.gameState == Blackjack.State.Win){
-
+        else if (game.gameState == Blackjack.State.Win){
+            endState.setText("You Win");
 
             game.gameState=Blackjack.State.Playing;
         }
+    
 
         System.out.println("updating");
 
         this.revalidate();
 
         this.repaint();
-
+        if (game.gameState == Blackjack.State.Playing && !endState.getText().equals("Playing")){
+            Thread.sleep(10000);
+            endState.setText("Playing");
+            game.resetGame();
+        }
     }
 
     @Override

@@ -45,11 +45,12 @@ public class Dealer {
             }
             aces = 0;
             
-            Thread.sleep(5000);
+            Thread.sleep((int)(Math.random()*2000)+3000);
         }
         if (score>21){
             busted = true;
         }
+        game.gameOver();
         
     }
 

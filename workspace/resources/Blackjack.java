@@ -17,7 +17,7 @@ public class Blackjack {
     ArrayList<Card> cards = new ArrayList<>();
 	State gameState = State.Playing;
 	
-	public Blackjack(){
+	public Blackjack() throws InterruptedException{
 		for (int i = 0; i < 4; i++) {
             for (int j = 1; j < 14; j++) {
                 Card card = new Card(1, Card.Suit.Clubs);
@@ -56,7 +56,7 @@ public class Blackjack {
 		return card;
 	}
 
-	public void playerHit(){
+	public void playerHit() throws InterruptedException{
 		Card card = hit();
 		cards.add(card);
 		int newVal = card.value;
@@ -81,6 +81,7 @@ public class Blackjack {
             }
 			if (score>21){
 				busted = true;
+				stand();
 			}
             aces = 0;
 		}
@@ -93,7 +94,7 @@ public class Blackjack {
 		}
 	}
 
-	public void resetGame(){
+	public void resetGame() throws InterruptedException{
 		for(int i = 0; i < cards.size(); i++){
 			discard.add(cards.get(i));
 		}
@@ -104,6 +105,7 @@ public class Blackjack {
 		dealer = newDealer;
 		gui.dealer = newDealer;
 		playerHit();
+		Thread.sleep(3000);
 		playerHit();
 	}
 	
