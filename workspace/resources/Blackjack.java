@@ -43,14 +43,18 @@ public class Blackjack {
 
 		Collections.shuffle(deck);
 
-		playerHit();
-		playerHit();
+		
 	}
 
 	//the part of your program that's in charge of game rules goes here.
 	public Card hit(){
-		if (deck.empty())
-		Collections.shuffle(deck);
+		if (deck.empty()){
+			for (int i = 0; i<discard.size();i++){
+				deck.add(discard.poll());
+			}
+			Collections.shuffle(deck);
+		}
+		
 		
 		Card card = deck.pop();
 		return card;
@@ -81,10 +85,13 @@ public class Blackjack {
             }
 			if (score>21){
 				busted = true;
-				stand();
+				gameState = State.Lose;
+				playerTurn=false;
 			}
+			System.out.print(busted);
             aces = 0;
 		}
+		gui.update();
 	}
 
 	public void stand() throws InterruptedException{
@@ -101,11 +108,14 @@ public class Blackjack {
 		for(int i = 0; i < dealer.cards.size(); i++){
 			discard.add(dealer.cards.get(i));
 		}
-		Dealer newDealer = new Dealer(this);
+		score = 0;
+		cards.clear();
+		busted=false;
+		Dealer newDealer = new Dealer(this,gui);
 		dealer = newDealer;
 		gui.dealer = newDealer;
+		playerTurn=true;
 		playerHit();
-		Thread.sleep(3000);
 		playerHit();
 	}
 	
