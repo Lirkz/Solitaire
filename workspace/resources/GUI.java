@@ -32,6 +32,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
     JButton standButton;
     JButton hitButton;
     Boolean paused=false;
+    int pass = 0;
 
     public GUI(Blackjack game) throws InterruptedException{
 
@@ -62,7 +63,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
         c.gridx = 0;
         c.gridy = 0;
-        back.setBorder(BorderFactory.createLineBorder(Color.black, 5));
+        // back.setBorder(BorderFactory.createLineBorder(Color.black, 5));
         back.setBackground(new Color(0, 0, 0, 0));
         add(back, c);
 
@@ -74,7 +75,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         c.gridy = 0;
         c.weightx = 3;
         top.setLayout(new FlowLayout());
-        top.setBorder(BorderFactory.createLineBorder(Color.blue, 5));
+        // top.setBorder(BorderFactory.createLineBorder(Color.blue, 5));
         top.setBackground(new Color(0, 0, 0, 0));
         add(top, c);
 
@@ -86,7 +87,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         c.gridy = 0;
         c.weightx = 3;
         bottom.setLayout(new FlowLayout());
-        bottom.setBorder(BorderFactory.createLineBorder(Color.red, 5));
+        // bottom.setBorder(BorderFactory.createLineBorder(Color.red, 5));
         bottom.setBackground(new Color(0, 0, 0, 0));
         add(bottom, c);
 
@@ -97,7 +98,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 3;
-        middle.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
+        // middle.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
         // middle.setBackground(new Color(0, 0, 0, 0));
         middle.setLayout(null);
         middle.setOpaque(false);
@@ -169,6 +170,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         
         }
 
+    
+
         // tempIcon = new ImageIcon("stand.png");
         standButton = new JButton("Stand");
         standButton.addActionListener(new ActionListener() {
@@ -176,6 +179,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
             public void actionPerformed(ActionEvent e){
                 try {
                     game.stand();
+                    game.playerHasInputted = true;
                 } catch (InterruptedException e1) {
                     
                     e1.printStackTrace();
@@ -199,6 +203,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
                 
                 try {
                     game.playerHit();
+                    game.playerHasInputted = true;
+
                     update();
                 } catch (InterruptedException e1) {
                     
@@ -218,7 +224,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         Card disCardGeddit = new Card(2, Card.Suit.Diamonds);
         disCardGeddit.isReversed=true;
         disCardGeddit.setSize(80, 120);
-        disCardGeddit.setLocation(475, 0);
+        disCardGeddit.setLocation(450, 0);
         middle.add(disCardGeddit);
         }
 
@@ -243,12 +249,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
             for (Card card : dealer.cards){
                 card.setPreferredSize(new Dimension(80, 120));
                 top.add(card);
-                if (!paused&& game.gameState != Blackjack.State.Playing){
-                    paused=true;
-                    game.gameState = Blackjack.State.Playing;
-                }
+                
             }
-            
+            //if (!paused&& game.gameState != Blackjack.State.Playing){
+                  //  paused=true;
+               //     game.gameState = Blackjack.State.Playing;
+              //  }
         }
         if(!game.cards.isEmpty()){
             for (Card card : game.cards){
@@ -259,28 +265,50 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
       
         JLabel endState = new JLabel("Playing", JLabel.CENTER);
-        endState.setLocation(380,50);
+        endState.setLocation(350,35);
         // endState.setPreferredSize(new Dimension(60,30));
-        endState.setSize(100,50);
-        
+        endState.setSize(150,50);
+        endState.setFont(new Font("Comic ", Font.BOLD, 24));
         middle.add(endState);
+
+        if(game.playerHasInputted==false){
+            
+            JLabel dealerLabel = new JLabel("Dealer", JLabel.CENTER);
+            dealerLabel.setLocation(25,35);
+            // dealerLabel.setPreferredSize(new Dimension(60,30));
+            dealerLabel.setSize(150,50);
+            dealerLabel.setFont(new Font("Comic ", Font.BOLD, 20));
+            top.add(dealerLabel);
+
+            JLabel playerLabel = new JLabel("Player", JLabel.CENTER);
+            playerLabel.setLocation(25,35);
+            // playerLabel.setPreferredSize(new Dimension(60,30));
+            playerLabel.setSize(150,50);
+            playerLabel.setFont(new Font("Comic ", Font.BOLD, 20));
+            bottom.add(playerLabel);
+        
+        }
+
+        
+
+
         
         if (game.gameState==Blackjack.State.Tie){
             endState.setText("You Tied");
-            
-            paused = true;
+            pass+=1;
+            //paused = true;
         }
         
-        else if (game.gameState==Blackjack.State.Lose){
+        if (game.gameState==Blackjack.State.Lose){
             endState.setText("You Lose");
-            
-            paused = true;
+            pass+=1;
+            //paused = true;
         }
 
-        else if (game.gameState == Blackjack.State.Win){
+        if (game.gameState == Blackjack.State.Win){
             endState.setText("You Win");
-
-            paused = true;
+            pass+=1;
+            //paused = true;
         }
     
 
@@ -289,10 +317,10 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         this.revalidate();
 
         this.repaint();
-        if (game.gameState == Blackjack.State.Playing && paused){
+        if (game.gameState != Blackjack.State.Playing && pass==4){
             Thread.sleep(3000);
             endState.setText("Playing");
-            paused = false;
+           //paused = false;
             game.resetGame();
         }
     }

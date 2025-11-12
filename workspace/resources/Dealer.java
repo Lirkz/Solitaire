@@ -34,26 +34,29 @@ public class Dealer {
             for (Card card : cards){
                 if (card.isAce){
                     aces++;
+                    score+=10;
                 }
                 int newVal = card.value;
 		        if (newVal>10){
 			        newVal=10;
 		        }
                 score+=newVal;
+                System.out.println(score);
             }
             while (aces>0 && score >21){
                 score-=10;
                 aces--;
             }
             aces = 0;
-            System.out.print(cards);
+            System.out.print(" "+score);
+            if (score>21){
+                busted = true;
+            }
             gui.update();
             //Thread.sleep((int)(Math.random()*2000)+3000);
             
         }
-        if (score>21){
-            busted = true;
-        }
+        
         game.gameOver();
         
     }
