@@ -245,6 +245,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
                 top.add(card);
                 if (!paused&& game.gameState != Blackjack.State.Playing){
                     paused=true;
+                    game.gameState = Blackjack.State.Playing;
                 }
             }
             
@@ -267,19 +268,19 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         if (game.gameState==Blackjack.State.Tie){
             endState.setText("You Tied");
             
-            game.gameState=Blackjack.State.Playing;
+            paused = true;
         }
         
         else if (game.gameState==Blackjack.State.Lose){
             endState.setText("You Lose");
             
-            game.gameState=Blackjack.State.Playing;
+            paused = true;
         }
 
         else if (game.gameState == Blackjack.State.Win){
             endState.setText("You Win");
 
-            game.gameState=Blackjack.State.Playing;
+            paused = true;
         }
     
 
@@ -291,6 +292,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         if (game.gameState == Blackjack.State.Playing && paused){
             Thread.sleep(3000);
             endState.setText("Playing");
+            paused = false;
             game.resetGame();
         }
     }
