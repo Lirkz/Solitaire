@@ -31,12 +31,16 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
     Icon tempIcon;
     JButton standButton;
     JButton hitButton;
+    Boolean paused=false;
+    int pass = 0;
 
     public GUI(Blackjack game) throws InterruptedException{
 
         this.game = game;
-        game.gui = this;
-        dealer = new Dealer(game);
+        
+        dealer = new Dealer(game,this);
+        this.game.gui = this;
+        this.game.dealer = dealer;
         // Create and set up the window.
         setTitle("Blackjack");
         setSize(900, 700);
@@ -59,7 +63,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
         c.gridx = 0;
         c.gridy = 0;
-        back.setBorder(BorderFactory.createLineBorder(Color.black, 5));
+        // back.setBorder(BorderFactory.createLineBorder(Color.black, 5));
         back.setBackground(new Color(0, 0, 0, 0));
         add(back, c);
 
@@ -71,7 +75,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         c.gridy = 0;
         c.weightx = 3;
         top.setLayout(new FlowLayout());
-        top.setBorder(BorderFactory.createLineBorder(Color.blue, 5));
+        // top.setBorder(BorderFactory.createLineBorder(Color.blue, 5));
         top.setBackground(new Color(0, 0, 0, 0));
         add(top, c);
 
@@ -83,7 +87,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         c.gridy = 0;
         c.weightx = 3;
         bottom.setLayout(new FlowLayout());
-        bottom.setBorder(BorderFactory.createLineBorder(Color.red, 5));
+        // bottom.setBorder(BorderFactory.createLineBorder(Color.red, 5));
         bottom.setBackground(new Color(0, 0, 0, 0));
         add(bottom, c);
 
@@ -94,7 +98,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         c.gridx = 0;
         c.gridy = 0;
         c.weightx = 3;
-        middle.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
+        // middle.setBorder(BorderFactory.createLineBorder(Color.yellow, 5));
         // middle.setBackground(new Color(0, 0, 0, 0));
         middle.setLayout(null);
         middle.setOpaque(false);
@@ -119,6 +123,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         // this.add(card);
 
         this.setVisible(true);
+        game.playerHit();
+		game.playerHit();
         update();
     }
 
@@ -151,26 +157,29 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
     }
 
     public void update() throws InterruptedException {
-        System.out.println("test");
+        
         top.removeAll();
         bottom.removeAll();
         middle.removeAll();
         if(!game.discard.isEmpty()){
         Card card = new Card(2, Card.Suit.Diamonds);
         card.isReversed=true;
-        card.setSize(1000, 1500);
+        card.setPreferredSize(new Dimension(40, 60));
         card.setLocation(150, 150);
         middle.add(card);
-        System.out.println("added discard");
+        
         }
 
-        tempIcon = new ImageIcon("stand.png");
+    
+
+        // tempIcon = new ImageIcon("stand.png");
         standButton = new JButton("Stand");
         standButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
                 try {
                     game.stand();
+                    game.playerHasInputted = true;
                 } catch (InterruptedException e1) {
                     
                     e1.printStackTrace();
@@ -186,7 +195,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         
         
 
-        tempIcon = new ImageIcon("hit.png");
+        // tempIcon = new ImageIcon("/workspace/resources/hit.png");
         hitButton = new JButton("Hit");
         hitButton.addActionListener(new ActionListener() {
             @Override
@@ -194,6 +203,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
                 
                 try {
                     game.playerHit();
+                    game.playerHasInputted = true;
+
                     update();
                 } catch (InterruptedException e1) {
                     
@@ -209,11 +220,19 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         standButton.setLocation(600, 25);
         middle.add(standButton);
 
+        if (!game.discard.isEmpty()){
+        Card disCardGeddit = new Card(2, Card.Suit.Diamonds);
+        disCardGeddit.isReversed=true;
+        disCardGeddit.setSize(80, 120);
+        disCardGeddit.setLocation(450, 0);
+        middle.add(disCardGeddit);
+        }
+
         if (!game.deck.isEmpty()){
         Card drawCard = new Card(2, Card.Suit.Diamonds);
         drawCard.isReversed=true;
-        drawCard.setSize(1000, 1500);
-        drawCard.setLocation(100, 150);
+        drawCard.setSize(80, 120);
+        drawCard.setLocation(225, 0);
         middle.add(drawCard);
         }
 
@@ -230,8 +249,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
             for (Card card : dealer.cards){
                 card.setPreferredSize(new Dimension(80, 120));
                 top.add(card);
+                
             }
-            
+            //if (!paused&& game.gameState != Blackjack.State.Playing){
+                  //  paused=true;
+               //     game.gameState = Blackjack.State.Playing;
+              //  }
         }
         if(!game.cards.isEmpty()){
             for (Card card : game.cards){
@@ -241,39 +264,63 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         }
 
       
-        JLabel endState = new JLabel("Playing");
-        endState.setLocation(15,0);
-        endState.setSize(600,300);
-        
+        JLabel endState = new JLabel("Playing", JLabel.CENTER);
+        endState.setLocation(350,35);
+        // endState.setPreferredSize(new Dimension(60,30));
+        endState.setSize(150,50);
+        endState.setFont(new Font("Comic ", Font.BOLD, 24));
         middle.add(endState);
+
+        if(game.playerHasInputted==false){
+            
+            JLabel dealerLabel = new JLabel("Dealer", JLabel.CENTER);
+            dealerLabel.setLocation(25,35);
+            // dealerLabel.setPreferredSize(new Dimension(60,30));
+            dealerLabel.setSize(150,50);
+            dealerLabel.setFont(new Font("Comic ", Font.BOLD, 20));
+            top.add(dealerLabel);
+
+            JLabel playerLabel = new JLabel("Player", JLabel.CENTER);
+            playerLabel.setLocation(25,35);
+            // playerLabel.setPreferredSize(new Dimension(60,30));
+            playerLabel.setSize(150,50);
+            playerLabel.setFont(new Font("Comic ", Font.BOLD, 20));
+            bottom.add(playerLabel);
+        
+        }
+
+        
+
+
         
         if (game.gameState==Blackjack.State.Tie){
             endState.setText("You Tied");
-            
-            game.gameState=Blackjack.State.Playing;
+            pass+=1;
+            //paused = true;
         }
         
-        else if (game.gameState==Blackjack.State.Lose){
+        if (game.gameState==Blackjack.State.Lose){
             endState.setText("You Lose");
-            
-            game.gameState=Blackjack.State.Playing;
+            pass+=1;
+            //paused = true;
         }
 
-        else if (game.gameState == Blackjack.State.Win){
+        if (game.gameState == Blackjack.State.Win){
             endState.setText("You Win");
-
-            game.gameState=Blackjack.State.Playing;
+            pass+=1;
+            //paused = true;
         }
     
 
-        System.out.println("updating");
+        
 
         this.revalidate();
 
         this.repaint();
-        if (game.gameState == Blackjack.State.Playing && !endState.getText().equals("Playing")){
-            Thread.sleep(10000);
+        if (game.gameState != Blackjack.State.Playing && pass==4){
+            Thread.sleep(3000);
             endState.setText("Playing");
+           //paused = false;
             game.resetGame();
         }
     }

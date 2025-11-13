@@ -16,6 +16,7 @@ public class Blackjack {
 	int usedAces=0;
     ArrayList<Card> cards = new ArrayList<>();
 	State gameState = State.Playing;
+	boolean playerHasInputted = false;
 	
 	public Blackjack() throws InterruptedException{
 		for (int i = 0; i < 4; i++) {
@@ -43,14 +44,18 @@ public class Blackjack {
 
 		Collections.shuffle(deck);
 
-		playerHit();
-		playerHit();
+		
 	}
 
 	//the part of your program that's in charge of game rules goes here.
 	public Card hit(){
-		if (deck.empty())
-		Collections.shuffle(deck);
+		if (deck.empty()){
+			for (int i = 0; i<discard.size();i++){
+				deck.add(discard.poll());
+			}
+			Collections.shuffle(deck);
+		}
+		
 		
 		Card card = deck.pop();
 		return card;
@@ -81,10 +86,13 @@ public class Blackjack {
             }
 			if (score>21){
 				busted = true;
-				stand();
+				gameState = State.Lose;
+				gameOver();
 			}
+			System.out.print(busted);
             aces = 0;
 		}
+		gui.update();
 	}
 
 	public void stand() throws InterruptedException{
@@ -101,27 +109,35 @@ public class Blackjack {
 		for(int i = 0; i < dealer.cards.size(); i++){
 			discard.add(dealer.cards.get(i));
 		}
-		Dealer newDealer = new Dealer(this);
+		score = 0;
+		cards.clear();
+		busted=false;
+		Dealer newDealer = new Dealer(this,gui);
 		dealer = newDealer;
 		gui.dealer = newDealer;
+		gameState= Blackjack.State.Playing;
+		playerTurn=true;
 		playerHit();
-		Thread.sleep(3000);
 		playerHit();
 	}
 	
 	public void gameOver() throws InterruptedException{
+		playerTurn=false;
 		if(score == dealer.score){
 			gameState = State.Tie;
+			System.out.println("Tie");
 			gui.update();
 		}
 
-		if(score > dealer.score || dealer.busted){
+		if(dealer.busted || score > dealer.score || (score < dealer.score && dealer.busted)){
 			gameState = State.Win;
+			System.out.println("Win");
 			gui.update();
 		}
 
-		if(score < dealer.score || busted){
+		if((score < dealer.score && !dealer.busted) || busted){
 			gameState = State.Lose;
+			System.out.println("Lose");
 			gui.update();
 		}
 

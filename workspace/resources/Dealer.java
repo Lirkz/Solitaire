@@ -6,11 +6,13 @@ public class Dealer {
     boolean busted;
     ArrayList<Card> cards = new ArrayList<>();
     Blackjack game;
+    GUI gui;
 
-    public Dealer(Blackjack g){
+    public Dealer(Blackjack g, GUI gui){
         game = g;
+        this.gui = gui;
         Card card1 = game.hit();
-        card1.isReversed=true;
+        //card1.isReversed=true;
         cards.add(card1);
         cards.add(game.hit());
         for (Card card : cards){
@@ -32,24 +34,29 @@ public class Dealer {
             for (Card card : cards){
                 if (card.isAce){
                     aces++;
+                    score+=10;
                 }
                 int newVal = card.value;
 		        if (newVal>10){
 			        newVal=10;
 		        }
                 score+=newVal;
+                System.out.println(score);
             }
             while (aces>0 && score >21){
                 score-=10;
                 aces--;
             }
             aces = 0;
+            System.out.print(" "+score);
+            if (score>21){
+                busted = true;
+            }
+            gui.update();
+            //Thread.sleep((int)(Math.random()*2000)+3000);
             
-            Thread.sleep((int)(Math.random()*2000)+3000);
         }
-        if (score>21){
-            busted = true;
-        }
+        
         game.gameOver();
         
     }
