@@ -222,7 +222,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
             hitButton.setEnabled(true);
         }
         else{
-            standButton.setEnabled(true);
+            standButton.setEnabled(false);
             hitButton.setEnabled(false);
         }
         
