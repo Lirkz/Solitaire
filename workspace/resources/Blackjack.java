@@ -1,7 +1,4 @@
 package resources;
-import java.util.ArrayList;
-import java.util.Queue;
-import java.util.Stack;
 import java.util.*;
 
 public class Blackjack {
@@ -18,7 +15,7 @@ public class Blackjack {
 	State gameState = State.Playing;
 	boolean playerHasInputted = false;
 	
-	public Blackjack() throws InterruptedException{
+	public Blackjack(){
 		for (int i = 0; i < 4; i++) {
             for (int j = 1; j < 14; j++) {
                 Card card = new Card(1, Card.Suit.Clubs);
@@ -61,7 +58,7 @@ public class Blackjack {
 		return card;
 	}
 
-	public void playerHit() throws InterruptedException{
+	public void playerHit(){
 		Card card = hit();
 		cards.add(card);
 		int newVal = card.value;
@@ -95,14 +92,14 @@ public class Blackjack {
 		gui.update();
 	}
 
-	public void stand() throws InterruptedException{
+	public void stand(){
 		if (playerTurn){
 			playerTurn = false;
 			dealer.play();
 		}
 	}
 
-	public void resetGame() throws InterruptedException{
+	public void resetGame(){
 		for(int i = 0; i < cards.size(); i++){
 			discard.add(cards.get(i));
 		}
@@ -116,28 +113,29 @@ public class Blackjack {
 		dealer = newDealer;
 		gui.dealer = newDealer;
 		gameState= Blackjack.State.Playing;
+		gui.endState.setText("Playing");
 		playerTurn=true;
 		playerHit();
 		playerHit();
 	}
 	
-	public void gameOver() throws InterruptedException{
+	public void gameOver(){
 		playerTurn=false;
 		if(score == dealer.score){
 			gameState = State.Tie;
-			System.out.println("Tie");
+			//System.out.println("Tie");
 			gui.update();
 		}
 
 		if(dealer.busted || score > dealer.score || (score < dealer.score && dealer.busted)){
 			gameState = State.Win;
-			System.out.println("Win");
+			//System.out.println("Win");
 			gui.update();
 		}
 
 		if((score < dealer.score && !dealer.busted) || busted){
 			gameState = State.Lose;
-			System.out.println("Lose");
+			//System.out.println("Lose");
 			gui.update();
 		}
 
