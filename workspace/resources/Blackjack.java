@@ -44,7 +44,8 @@ public class Blackjack {
 		
 	}
 
-	//the part of your program that's in charge of game rules goes here.
+	//Precondition: 
+	//Postcondition: 
 	public Card hit(){
 		if (deck.empty()){
 			for (int i = 0; i<discard.size();i++){
@@ -58,6 +59,8 @@ public class Blackjack {
 		return card;
 	}
 
+	//Precondition: 
+	//Postcondition: 
 	public void playerHit(){
 		Card card = hit();
 		cards.add(card);
@@ -92,6 +95,8 @@ public class Blackjack {
 		gui.update();
 	}
 
+	//Precondition: 
+	//Postcondition: 
 	public void stand(){
 		if (playerTurn){
 			playerTurn = false;
@@ -99,6 +104,8 @@ public class Blackjack {
 		}
 	}
 
+	//Precondition: 
+	//Postcondition: 
 	public void resetGame(){
 		for(int i = 0; i < cards.size(); i++){
 			discard.add(cards.get(i));
@@ -119,6 +126,8 @@ public class Blackjack {
 		playerHit();
 	}
 	
+	//Precondition: 
+	//Postcondition: 
 	public void gameOver(){
 		playerTurn=false;
 		if(score == dealer.score){

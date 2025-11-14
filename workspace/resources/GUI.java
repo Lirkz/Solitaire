@@ -158,6 +158,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
     }
 
+    //Precondition: 
+	//Postcondition: 
     public void update(){
         
         top.removeAll();
@@ -375,6 +377,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
     }
 
+    //Precondition: Timer from update ends
+	//Postcondition: Stop the timer 
     @Override
     public void actionPerformed(ActionEvent e) {
         timer.stop();
