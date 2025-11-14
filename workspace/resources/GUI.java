@@ -158,8 +158,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
     }
 
-    //Precondition: 
-	//Postcondition: 
+    //Precondition: The game needs to update to show something new
+	//Postcondition: Redraws everything as well as anything new that needs to show up and check if the game ends
     public void update(){
         
         top.removeAll();
@@ -378,7 +378,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
     }
 
     //Precondition: Timer from update ends
-	//Postcondition: Stop the timer 
+	//Postcondition: Stop the timer and restart the game
     @Override
     public void actionPerformed(ActionEvent e) {
         timer.stop();
