@@ -31,10 +31,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
     Icon tempIcon;
     JButton standButton;
     JButton hitButton;
+    JLabel endState = new JLabel("Playing", JLabel.CENTER);
     Boolean paused=false;
+    Timer timer;
     int pass = 0;
 
-    public GUI(Blackjack game) throws InterruptedException{
+    public GUI(Blackjack game){
 
         this.game = game;
         
@@ -156,7 +158,9 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
     }
 
-    public void update() throws InterruptedException {
+    //Precondition: 
+	//Postcondition: 
+    public void update(){
         
         top.removeAll();
         bottom.removeAll();
@@ -177,19 +181,19 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         standButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                try {
+                
                     game.stand();
                     game.playerHasInputted = true;
-                } catch (InterruptedException e1) {
+                
                     
-                    e1.printStackTrace();
-                }
-                try {
+                    
+                
+                
                     update();
-                } catch (InterruptedException e1) {
+                
                     
-                    e1.printStackTrace();
-                }
+                    
+                
             }
         });
         
@@ -201,15 +205,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                try {
+                
                     game.playerHit();
                     game.playerHasInputted = true;
 
                     update();
-                } catch (InterruptedException e1) {
-                    
-                    e1.printStackTrace();
-                }
+                
             }
             
         });
@@ -224,7 +225,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         Card disCardGeddit = new Card(2, Card.Suit.Diamonds);
         disCardGeddit.isReversed=true;
         disCardGeddit.setSize(80, 120);
-        disCardGeddit.setLocation(450, 0);
+        disCardGeddit.setLocation(500, 0);
         middle.add(disCardGeddit);
         }
 
@@ -264,8 +265,8 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         }
 
       
-        JLabel endState = new JLabel("Playing", JLabel.CENTER);
-        endState.setLocation(350,35);
+        endState = new JLabel(endState.getText(), JLabel.CENTER);
+        endState.setLocation(325,35);
         // endState.setPreferredSize(new Dimension(60,30));
         endState.setSize(150,50);
         endState.setFont(new Font("Comic ", Font.BOLD, 24));
@@ -295,35 +296,44 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
         
         if (game.gameState==Blackjack.State.Tie){
             endState.setText("You Tied");
-            pass+=1;
+           // pass+=1;
             //paused = true;
         }
         
         if (game.gameState==Blackjack.State.Lose){
             endState.setText("You Lose");
-            pass+=1;
+           // pass+=1;
             //paused = true;
         }
 
         if (game.gameState == Blackjack.State.Win){
             endState.setText("You Win");
-            pass+=1;
+           // pass+=1;
             //paused = true;
         }
-    
+        
 
         
 
         this.revalidate();
 
         this.repaint();
-        if (game.gameState != Blackjack.State.Playing && pass==4){
-            Thread.sleep(3000);
-            endState.setText("Playing");
-           //paused = false;
-            game.resetGame();
+        
+        if (game.gameState != Blackjack.State.Playing && !paused){
+            
+            timer = new Timer(5000, this);
+            timer.start(); 
+            for (Card card : dealer.cards){
+                if (card.isReversed){
+                    card.isReversed=false;
+                }
+            }
+            
+            paused = true;
+            
         }
     }
+    
 
     @Override
     public void mouseDragged(MouseEvent arg0) {
@@ -367,9 +377,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
     }
 
+    //Precondition: Timer from update ends
+	//Postcondition: Stop the timer 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
+        timer.stop();
+        game.resetGame();
+        paused =false;
     }
 }

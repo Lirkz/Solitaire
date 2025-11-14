@@ -1,18 +1,23 @@
  package resources;
 import java.util.ArrayList;
-public class Dealer {
+import javax.swing.*;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+public class Dealer{
     int score;
     int aces;
     boolean busted;
     ArrayList<Card> cards = new ArrayList<>();
     Blackjack game;
     GUI gui;
+    Timer timer;
 
     public Dealer(Blackjack g, GUI gui){
         game = g;
         this.gui = gui;
         Card card1 = game.hit();
-        //card1.isReversed=true;
+        card1.isReversed=true;
         cards.add(card1);
         cards.add(game.hit());
         for (Card card : cards){
@@ -27,9 +32,10 @@ public class Dealer {
         }
     }
 
-    public void play() throws InterruptedException{
+    public void play(){
         while (score<17){
             score =0;
+            
             cards.add(game.hit());
             for (Card card : cards){
                 if (card.isAce){
@@ -41,17 +47,18 @@ public class Dealer {
 			        newVal=10;
 		        }
                 score+=newVal;
-                System.out.println(score);
+                
             }
             while (aces>0 && score >21){
                 score-=10;
                 aces--;
             }
             aces = 0;
-            System.out.print(" "+score);
+            
             if (score>21){
                 busted = true;
             }
+            
             gui.update();
             //Thread.sleep((int)(Math.random()*2000)+3000);
             
@@ -60,6 +67,9 @@ public class Dealer {
         game.gameOver();
         
     }
+
+    
+    
 
     
 }
