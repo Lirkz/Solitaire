@@ -44,8 +44,8 @@ public class Blackjack {
 		
 	}
 
-	//Precondition: 
-	//Postcondition: 
+	//Precondition: if play in dealer is called
+	//Postcondition:if deck is empty reshufle deck from discard pile otherwise draw a card from the deck
 	public Card hit(){
 		if (deck.empty()){
 			for (int i = 0; i<discard.size();i++){
@@ -59,8 +59,9 @@ public class Blackjack {
 		return card;
 	}
 
-	//Precondition: 
-	//Postcondition: 
+	//Precondition: If the player presses the hit button
+	//Postcondition: give the player a card and add the value to the score if the player 
+	//has and ace and goes over 21 set the ace value to 1 if busts set bust equal to true
 	public void playerHit(){
 		Card card = hit();
 		cards.add(card);
@@ -95,8 +96,8 @@ public class Blackjack {
 		gui.update();
 	}
 
-	//Precondition: 
-	//Postcondition: 
+	//Precondition: if the player presses stay
+	//Postcondition: set the playerturn to false and make the dealer play
 	public void stand(){
 		if (playerTurn){
 			playerTurn = false;
@@ -104,8 +105,9 @@ public class Blackjack {
 		}
 	}
 
-	//Precondition: 
-	//Postcondition: 
+	//Precondition: when reset game is called
+	//Postcondition: add all cards on the board to discard, set score to 0, set busted to false,
+	//instantiate a new dealer, set the gameState to playing, set to player turn, and hit twice
 	public void resetGame(){
 		for(int i = 0; i < cards.size(); i++){
 			discard.add(cards.get(i));
@@ -126,8 +128,8 @@ public class Blackjack {
 		playerHit();
 	}
 	
-	//Precondition: 
-	//Postcondition: 
+	//Precondition: if gameover is called
+	//Postcondition: depending on the score choose win, lose or tie, set the gamestate accordingly, update gui
 	public void gameOver(){
 		playerTurn=false;
 		if(score == dealer.score){
