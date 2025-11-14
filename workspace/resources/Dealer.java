@@ -32,6 +32,8 @@ public class Dealer{
         }
     }
 
+    //Precondition: The player ends their turn and hasn't busted
+	//Postcondition: The dealer plays until they either bust or get a number between 17 and 21 (inclusive) before ending the game
     public void play(){
         while (score<17){
             score =0;
